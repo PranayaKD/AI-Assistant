@@ -65,7 +65,7 @@ Write ONLY the cover letter content, no additional formatting or explanations.""
         # Save to file
         filename = f"{company.replace(' ', '_')}_{title.replace(' ', '_')[:30]}.txt"
         # Remove special characters from filename
-        filename = "".join(c for c in filename if c.isalnum() or c in ['_', '-', '.']
+        filename = "".join(c for c in filename if c.isalnum() or c in ['_', '-', '.'])
         filepath = os.path.join(self.output_dir, filename)
         
         with open(filepath, 'w', encoding='utf-8') as f:
