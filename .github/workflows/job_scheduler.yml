@@ -1,0 +1,64 @@
+name: Job Search Assistant Scheduler
+
+on:
+  schedule:
+    # Morning run at 3:30 UTC (9:00 AM IST)
+    - cron: '30 3 * * *'
+    # Reminder at 8:45 UTC (2:15 PM IST)
+    - cron: '45 8 * * *'
+  
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  run-job-search:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          cd backend/job_assistant
+          pip install -r requirements.txt
+          pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
+      
+      - name: Determine task type
+        id: task
+        run: |
+          HOUR=$(date -u +%H)
+          if [ "$HOUR" -eq "3" ]; then
+            echo "task=morning" >> $GITHUB_OUTPUT
+          else
+            echo "task=reminder" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Run Job Search Assistant
+        env:
+          EMERGENT_LLM_KEY: ${{ secrets.EMERGENT_LLM_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          cd backend/job_assistant
+          python main.py ${{ steps.task.outputs.task }}
+      
+      - name: Upload Excel Output
+        if: steps.task.outputs.task == 'morning'
+        uses: actions/upload-artifact@v3
+        with:
+          name: job-applications
+          path: backend/job_assistant/output/excel/*.xlsx
+          retention-days: 30
+      
+      - name: Upload Cover Letters
+        if: steps.task.outputs.task == 'morning'
+        uses: actions/upload-artifact@v3
+        with:
+          name: cover-letters
+          path: backend/job_assistant/output/coverletters/*.txt
+          retention-days: 30
