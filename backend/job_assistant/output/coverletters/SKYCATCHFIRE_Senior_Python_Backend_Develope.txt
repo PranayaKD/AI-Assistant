@@ -1,0 +1,13 @@
+Dear Hiring Manager,
+
+I am writing to express my strong interest in the Senior Python Backend Developer position at SKYCATCHFIRE. As a passionate Fresher Python Backend / Django Developer, I am eager to contribute my skills and enthusiasm to your team.
+
+Through my academic journey and personal projects, I have developed strong proficiency in django, fastapi, flask. I have hands-on experience building scalable web applications, designing RESTful APIs, and working with databases like PostgreSQL and MongoDB. My projects demonstrate my ability to write clean, maintainable code and follow best practices.
+
+I am particularly drawn to SKYCATCHFIRE for the opportunity to work on challenging backend systems and grow as a developer. I am a quick learner, a strong collaborator, and I thrive in fast-paced environments where I can make meaningful contributions.
+
+I would welcome the opportunity to discuss how my skills and passion for backend development align with your team's goals. Thank you for considering my application.
+
+Sincerely,
+Pranaya KD
+your.email@example.com

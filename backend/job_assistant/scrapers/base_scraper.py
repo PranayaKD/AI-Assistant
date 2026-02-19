@@ -24,12 +24,24 @@ class BaseScraper(ABC):
     async def fetch(self, url: str, method: str = 'GET', **kwargs) -> str:
         """Fetch content from URL"""
         try:
+            # Add some randomness to delay to avoid pattern detection
+            import random
+            await asyncio.sleep(random.uniform(1.0, 3.0))
+
+            headers = self.headers.copy()
+            # Rotate user agents if possible, but here just use a very modern one
+            headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+            headers['Referer'] = 'https://www.google.com/'
+            
             timeout = aiohttp.ClientTimeout(total=self.timeout)
             async with aiohttp.ClientSession(timeout=timeout) as session:
                 if method == 'GET':
-                    async with session.get(url, headers=self.headers, **kwargs) as response:
+                    async with session.get(url, headers=headers, **kwargs) as response:
                         if response.status == 200:
                             return await response.text()
+                        elif response.status == 429:
+                            logger.error(f"{self.name}: Rate limited (429) by {url}")
+                            return ""
                         else:
                             logger.warning(f"{self.name}: HTTP {response.status} for {url}")
                             return ""

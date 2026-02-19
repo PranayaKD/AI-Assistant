@@ -22,31 +22,42 @@ class NaukriScraper(BaseScraper):
             html = await self.fetch(google_url)
             
             if html:
-                soup = BeautifulSoup(html, 'html.parser')
-                
-                for link in soup.find_all('a', href=True):
-                    href = link['href']
-                    if 'naukri.com/job-listings' in href:
-                        title_elem = link.find('h3')
-                        title = title_elem.get_text() if title_elem else "Python Developer"
-                        
-                        # Extract job URL
-                        match = re.search(r'(https://[^&]+naukri[^&]+)', href)
-                        if match:
-                            job_url = match.group(1)
-                            
-                            job = self.create_job_dict(
-                                job_id="",
-                                company="See on Naukri",
-                                title=title,
-                                description=f"Backend development role - {title}",
-                                location="India",
-                                link=job_url
-                            )
-                            jobs.append(job)
-                            
-                            if len(jobs) >= self.max_jobs:
-                                break
+                if "consent.google.com" in html:
+                    logger.warning(f"{self.name}: Blocked by Google Consent page")
+                else:
+                    soup = BeautifulSoup(html, 'html.parser')
+                    links_found = 0
+                    
+                    for link in soup.find_all('a', href=True):
+                        href = link['href']
+                        if 'naukri.com' in href and '/job-listings' in href:
+                            links_found += 1
+                            # Extract actual Naukri URL
+                            match = re.search(r'(https://[^&]+naukri[^&]+)', href)
+                            if match:
+                                job_url = match.group(1)
+                                job_url = job_url.replace('%3F', '?').replace('%3D', '=').replace('%26', '&')
+                                
+                                title_elem = link.find('h3') or link.find('div', {'role': 'heading'})
+                                title = title_elem.get_text() if title_elem else "Python Developer"
+                                
+                                job = self.create_job_dict(
+                                    job_id="", # Naukri IDs are complex, leave blank for hash
+                                    company="See on Naukri",
+                                    title=title,
+                                    description=f"Backend development role - {title}",
+                                    location="India",
+                                    link=job_url
+                                )
+                                jobs.append(job)
+                                
+                                if len(jobs) >= self.max_jobs:
+                                    break
+                    
+                    if links_found == 0:
+                        logger.debug(f"{self.name}: No naukri.com links found in Google results")
+            else:
+                logger.debug(f"{self.name}: Empty HTML response from Google")
         
         except Exception as e:
             logger.error(f"Error scraping Naukri: {str(e)}")

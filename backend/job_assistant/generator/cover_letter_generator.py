@@ -21,7 +21,8 @@ class CoverLetterGenerator:
             try:
                 import google.generativeai as genai
                 genai.configure(api_key=self.api_key)
-                self._gemini_model = genai.GenerativeModel('gemini-1.5-flash')
+                # Using latest model name
+                self._gemini_model = genai.GenerativeModel('gemini-1.5-flash-latest')
             except Exception as e:
                 print(f"Warning: Could not initialize Gemini: {e}")
                 self._gemini_model = None
