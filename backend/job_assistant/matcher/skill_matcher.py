@@ -1,5 +1,8 @@
 import re
+import logging
 from typing import Dict, List, Set
+
+logger = logging.getLogger(__name__)
 
 
 class SkillMatcher:
@@ -90,5 +93,11 @@ class SkillMatcher:
         job['matched_skills'] = sorted(list(matched_skills))
         job['missing_skills'] = sorted(list(missing_skills))
         job['match_percentage'] = round(match_percentage, 2)
+
+        # Log details for transparency
+        logger.debug(f"Matching Job: {title}")
+        logger.debug(f"  Required: {job['required_skills']}")
+        logger.debug(f"  Matched:  {job['matched_skills']}")
+        logger.debug(f"  Match %:  {job['match_percentage']}%")
 
         return job
