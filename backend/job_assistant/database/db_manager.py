@@ -28,7 +28,7 @@ class JobDatabase:
         try:
             with open(self.history_file, 'r') as f:
                 return json.load(f)
-        except:
+        except Exception:
             return {"jobs": []}
     
     def save_history(self, history: Dict):

@@ -18,15 +18,16 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       
       - name: Install dependencies
         run: |
-          cd backend/job_assistant
+          cd backend
           pip install -r requirements.txt
-          pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
+          cd job_assistant
+          pip install -r requirements.txt
       
       - name: Determine task type
         id: task
@@ -40,7 +41,7 @@ jobs:
       
       - name: Run Job Search Assistant
         env:
-          EMERGENT_LLM_KEY: ${{ secrets.EMERGENT_LLM_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
@@ -49,7 +50,7 @@ jobs:
       
       - name: Upload Excel Output
         if: steps.task.outputs.task == 'morning'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: job-applications
           path: backend/job_assistant/output/excel/*.xlsx
@@ -57,7 +58,7 @@ jobs:
       
       - name: Upload Cover Letters
         if: steps.task.outputs.task == 'morning'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cover-letters
           path: backend/job_assistant/output/coverletters/*.txt

@@ -1,4 +1,5 @@
 from typing import List, Dict
+import re
 from bs4 import BeautifulSoup
 from scrapers.base_scraper import BaseScraper
 import logging
@@ -30,7 +31,6 @@ class NaukriScraper(BaseScraper):
                         title = title_elem.get_text() if title_elem else "Python Developer"
                         
                         # Extract job URL
-                        import re
                         match = re.search(r'(https://[^&]+naukri[^&]+)', href)
                         if match:
                             job_url = match.group(1)

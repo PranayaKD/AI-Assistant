@@ -1,4 +1,5 @@
 from typing import List, Dict
+import re
 from bs4 import BeautifulSoup
 from scrapers.base_scraper import BaseScraper
 import logging
@@ -24,7 +25,6 @@ class UndutchablesScraper(BaseScraper):
                     if 'undutchables.nl' in href:
                         title_elem = link.find('h3')
                         title = title_elem.get_text() if title_elem else "Software Developer"
-                        import re
                         match = re.search(r'(https://[^&]+undutchables[^&]+)', href)
                         if match:
                             job = self.create_job_dict("", "See on Undutchables", title,

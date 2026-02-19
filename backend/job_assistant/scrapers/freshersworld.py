@@ -1,4 +1,5 @@
 from typing import List, Dict
+import re
 from bs4 import BeautifulSoup
 from scrapers.base_scraper import BaseScraper
 import logging
@@ -24,7 +25,6 @@ class FreshersworldScraper(BaseScraper):
                     if 'freshersworld.com' in href and 'jobs' in href:
                         title_elem = link.find('h3')
                         title = title_elem.get_text() if title_elem else "Python Developer"
-                        import re
                         match = re.search(r'(https://[^&]+freshersworld[^&]+)', href)
                         if match:
                             job = self.create_job_dict("", "See on Freshersworld", title,

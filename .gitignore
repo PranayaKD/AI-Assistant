@@ -31,7 +31,10 @@ dist/
 dist
 
 # Environment files (comprehensive coverage)
-
+.env
+.env.*
+!.env.example
+*.env
 *token.json*
 *credentials.json*
 
@@ -78,3 +81,12 @@ agenthub/agents/youtube/db
 
 # Mobile development
 android-sdk/ 
+
+# Tool-generated / unnecessary files
+.emergent/
+memory/
+test_reports/
+tests/
+app.code-workspace
+test_result.md
+yarn.lock

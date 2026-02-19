@@ -1,4 +1,5 @@
 from typing import List, Dict
+import re
 from bs4 import BeautifulSoup
 from scrapers.base_scraper import BaseScraper
 import logging
@@ -29,7 +30,6 @@ class InstahyreScraper(BaseScraper):
                         title_elem = link.find('h3')
                         title = title_elem.get_text() if title_elem else "Backend Developer"
                         
-                        import re
                         match = re.search(r'(https://[^&]+instahyre[^&]+)', href)
                         if match:
                             job_url = match.group(1)

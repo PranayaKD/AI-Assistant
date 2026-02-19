@@ -4,14 +4,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Personal Information (Update these with your details)
+# Personal Information (Update via .env or directly here)
 PERSONAL_INFO = {
-    "name": "Your Name",
-    "email": "your.email@example.com",
-    "phone": "+91-XXXXXXXXXX",
-    "github": "https://github.com/yourusername",
-    "linkedin": "https://linkedin.com/in/yourprofile",
-    "portfolio": "https://yourportfolio.com"
+    "name": os.getenv("USER_NAME", "Pranaya KD"),
+    "email": os.getenv("USER_EMAIL", "your.email@example.com"),
+    "phone": os.getenv("USER_PHONE", "+91-XXXXXXXXXX"),
+    "github": os.getenv("USER_GITHUB", "https://github.com/PranayaKD"),
+    "linkedin": os.getenv("USER_LINKEDIN", "https://linkedin.com/in/yourprofile"),
+    "portfolio": os.getenv("USER_PORTFOLIO", "https://yourportfolio.com")
 }
 
 # Target Profile
@@ -63,7 +63,7 @@ JOB_TITLES = [
 ]
 
 # API Keys and Tokens
-EMERGENT_LLM_KEY = os.getenv("EMERGENT_LLM_KEY", "")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
 

@@ -28,7 +28,6 @@ class TelegramNotifier:
             payload = {
                 "chat_id": self.chat_id,
                 "text": message,
-                "parse_mode": "HTML"
             }
             
             async with aiohttp.ClientSession() as session:
